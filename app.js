@@ -87,38 +87,38 @@ function searchByName(people) {
 
 //unfinished function to search through an array of people to find matching eye colors. Use searchByName as reference.
 
-function searchByEyeColor(people) {
-  let color = promptFor("What is the person's eys color?", autoValid);
+// function searchByEyeColor(people) {
+//   let color = promptFor("What is the person's eys color?", autoValid);
 
-  let foundEyeColor = people.filter(function (potentialMatch) {
-    if (potentialMatch.eyeColor === color) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  });
+//   let foundEyeColor = people.filter(function (potentialMatch) {
+//     if (potentialMatch.eyeColor === color) {
+//       return true;
+//     }
+//     else {
+//       return false;
+//     }
+//   });
 
-  return foundEyeColor;
+//   return foundEyeColor;
 
-}
+// }
 
 //TODO: add other trait filter functions here.
-function searchByGender(people) {
-  let gender = promptFor("What is the person's gender?", autoValid);
+// function searchByGender(people) {
+//   let gender = promptFor("What is the person's gender?", autoValid);
 
-  let foundGender = people.filter(function (potentialMatch) {
-    if (potentialMatch.gender === gender) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  });
+//   let foundGender = people.filter(function (potentialMatch) {
+//     if (potentialMatch.gender === gender) {
+//       return true;
+//     }
+//     else {
+//       return false;
+//     }
+//   });
 
-  return foundGender;
+//   return foundGender;
 
-}
+// }
 
 // Start search by various criteria.
 function searchByCriteriaChoice(people) {
@@ -132,43 +132,14 @@ function searchByCriteriaChoice(people) {
     case 'gender':
       userChoice = promptFor('What gender?\n(male or female)', autoValid);
       suspects = searchGeneral('gender', userChoice, suspectArray);
-
-      if(suspects.length > 1){
-        tryAgain = promptFor(`There are ${suspects.length} possible suspects, do you want to add another search criteria?\n(Y / N)`, autoValid);
-        
-        if(tryAgain.toUpperCase() == 'Y' ) {
-          searchByCriteriaChoice(suspects);
-        }
-      } else {
-        return suspects;
-      }
-      
       break;
     case 'dob':
       userChoice = promptFor('What is the date of birth?\n(mm/dd/yyyy)', autoValid);
       suspects = searchGeneral('dob', userChoice, suspectArray);
-      
-      if(suspects.length > 1){
-        alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
-      } else {
-        return suspects;
-      }
-      
       break;
     case 'height':
       userChoice = promptFor('What is the height?\n(in inches; 5 feet 5 inches = 65 inches)', autoValid);
       suspects = searchGeneral('height', parseInt(userChoice), suspectArray);
-
-      if(suspects.length > 1){
-        tryAgain = promptFor(`There are ${suspects.length} possible suspects, do you want to add another search criteria?\n(Y / N)`, autoValid);
-        
-        if(tryAgain.toUpperCase() == 'Y' ) {
-          searchByCriteriaChoice(suspects);
-        }
-      } else {
-        return suspects;
-      }
-      
       break;
     case 'weight':
       userChoice = promptFor('What is the weight?\n(in pounds)', autoValid);
@@ -186,11 +157,24 @@ function searchByCriteriaChoice(people) {
       alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     default:
-        userChoice = promptFor('That is not a valid criteria selection, please try again.', autoValid);
+      userChoice = promptFor('That is not a valid criteria selection, please try again.', autoValid);
 
-        if(userChoice.toUpperCase() == 'Y') {
-          searchByCriteriaChoice(people);
-        }
+      if (userChoice.toUpperCase() == 'Y') {
+        return searchByCriteriaChoice(people);
+      }
+      else {
+        app(people);
+      }
+  }
+
+  if (suspects.length > 1) {
+    tryAgain = promptFor(`There are ${suspects.length} possible suspects, do you want to add another search criteria?\n(Y / N)`, autoValid);
+
+    if (tryAgain.toUpperCase() == 'Y') {
+      return searchByCriteriaChoice(suspects);
+    }
+  } else {
+    return suspects;
   }
 }
 
