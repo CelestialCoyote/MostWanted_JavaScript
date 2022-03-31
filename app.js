@@ -140,12 +140,24 @@ function searchByCriteriaChoice(people) {
       alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     case 'height':
+      userChoice = promptFor('What is the height?\n(in inches; 5 feet 5 inches = 65 inches)', autoValid);
+      suspects = searchGeneral('height', parseInt(userChoice), suspectArray);
+      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     case 'weight':
+      userChoice = promptFor('What is the weight?\n(in pounds)', autoValid);
+      suspects = searchGeneral('weight', parseInt(userChoice), suspectArray);
+      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     case 'eyecolor':
+      userChoice = promptFor('What is the eye color?\n(black, blue, brown, green, hazel)', autoValid);
+      suspects = searchGeneral('eyeColor', userChoice, suspectArray);
+      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     case 'occupation':
+      userChoice = promptFor('What is the occupation?', autoValid);
+      suspects = searchGeneral('occupation', userChoice, suspectArray);
+      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     default:
         promptFor('That is not a valid criteria selection, please try again.');
