@@ -15,8 +15,7 @@ function app(people) {
       searchResults = searchByName(people);
       break;
     case 'no':
-      searchByCriteriaChoice(people);
-      //searchResults = searchByEyeColor(people);
+      searchResults = searchByCriteriaChoice(people);
       break;
     default:
       app(people); // restart app
@@ -127,22 +126,49 @@ function searchByCriteriaChoice(people) {
   let suspectArray = people;
   let userChoice = '';
   let suspects = '';
+  let tryAgain = '';
 
   switch (criteria) {
     case 'gender':
       userChoice = promptFor('What gender?\n(male or female)', autoValid);
       suspects = searchGeneral('gender', userChoice, suspectArray);
-      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
+
+      if(suspects.length > 1){
+        tryAgain = promptFor(`There are ${suspects.length} possible suspects, do you want to add another search criteria?\n(Y / N)`, autoValid);
+        
+        if(tryAgain.toUpperCase() == 'Y' ) {
+          searchByCriteriaChoice(suspects);
+        }
+      } else {
+        return suspects;
+      }
+      
       break;
     case 'dob':
       userChoice = promptFor('What is the date of birth?\n(mm/dd/yyyy)', autoValid);
       suspects = searchGeneral('dob', userChoice, suspectArray);
-      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
+      
+      if(suspects.length > 1){
+        alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
+      } else {
+        return suspects;
+      }
+      
       break;
     case 'height':
       userChoice = promptFor('What is the height?\n(in inches; 5 feet 5 inches = 65 inches)', autoValid);
       suspects = searchGeneral('height', parseInt(userChoice), suspectArray);
-      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
+
+      if(suspects.length > 1){
+        tryAgain = promptFor(`There are ${suspects.length} possible suspects, do you want to add another search criteria?\n(Y / N)`, autoValid);
+        
+        if(tryAgain.toUpperCase() == 'Y' ) {
+          searchByCriteriaChoice(suspects);
+        }
+      } else {
+        return suspects;
+      }
+      
       break;
     case 'weight':
       userChoice = promptFor('What is the weight?\n(in pounds)', autoValid);
@@ -160,8 +186,11 @@ function searchByCriteriaChoice(people) {
       alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     default:
-        promptFor('That is not a valid criteria selection, please try again.');
-        searchByCriteria(people);
+        userChoice = promptFor('That is not a valid criteria selection, please try again.', autoValid);
+
+        if(userChoice.toUpperCase() == 'Y') {
+          searchByCriteriaChoice(people);
+        }
   }
 }
 
