@@ -15,7 +15,8 @@ function app(people) {
       searchResults = searchByName(people);
       break;
     case 'no':
-      searchResults = searchByEyeColor(people);
+      searchByCriteriaChoice(people);
+      //searchResults = searchByEyeColor(people);
       break;
     default:
       app(people); // restart app
@@ -120,6 +121,45 @@ function searchByGender(people) {
 
 }
 
+// Start search by various criteria.
+function searchByCriteriaChoice(people) {
+  let criteria = promptFor('What criteria would like to use?\n(gender, dob, height, weight, eyecolor, occupation)', autoValid);
+  let suspectArray = people;
+
+  switch (criteria) {
+    case 'gender':
+      let genderChoice = promptFor('What gender?\n(male or female)', autoValid);
+      let suspects = searchGeneral('gender', genderChoice, suspectArray);
+      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
+      break;
+    case 'dob':
+      break;
+    case 'height':
+      break;
+    case 'weight':
+      break;
+    case 'eyecolor':
+      break;
+    case 'occupation':
+      break;
+    default:
+        promptFor('That is not a valid criteria selection, please try again.');
+        searchByCriteria(people);
+  }
+}
+
+function searchGeneral(criteria, criteriaChoice, suspectArray) {
+  let selectedCriteria = suspectArray.filter(function (potentialMatch) {
+    if (potentialMatch.criteria === criteriaChoice) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
+
+  return selectedCriteria;
+}
 
 
 //#endregion
