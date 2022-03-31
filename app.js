@@ -150,7 +150,7 @@ function searchByCriteriaChoice(people) {
 
 function searchGeneral(criteria, criteriaChoice, suspectArray) {
   let selectedCriteria = suspectArray.filter(function (potentialMatch) {
-    if (potentialMatch.criteria === criteriaChoice) {
+    if (potentialMatch[criteria] === criteriaChoice) {
       return true;
     }
     else {
