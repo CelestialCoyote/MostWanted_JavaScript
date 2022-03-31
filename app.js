@@ -125,14 +125,19 @@ function searchByGender(people) {
 function searchByCriteriaChoice(people) {
   let criteria = promptFor('What criteria would like to use?\n(gender, dob, height, weight, eyecolor, occupation)', autoValid);
   let suspectArray = people;
+  let userChoice = '';
+  let suspects = '';
 
   switch (criteria) {
     case 'gender':
-      let genderChoice = promptFor('What gender?\n(male or female)', autoValid);
-      let suspects = searchGeneral('gender', genderChoice, suspectArray);
+      userChoice = promptFor('What gender?\n(male or female)', autoValid);
+      suspects = searchGeneral('gender', userChoice, suspectArray);
       alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     case 'dob':
+      userChoice = promptFor('What is the date of birth?\n(mm/dd/yyyy)', autoValid);
+      suspects = searchGeneral('dob', userChoice, suspectArray);
+      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     case 'height':
       break;
