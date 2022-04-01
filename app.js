@@ -37,17 +37,23 @@ function mainMenu(person, people) {
   }
 
   // Changed !person to person[0].firstName and person[0].lastName to correctly access object array.
-  let displayOption = promptFor("Found " + person[0].firstName + " " + person[0].lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", autoValid);
+  let displayOption = promptFor(
+    `Found ${person[0].firstName} ${person[0].lastName}.
+    Do you want to know their 'info', 'family', or 'descendants'?
+    Type the option you want or 'restart' or 'quit'`,
+    autoValid);
 
   switch (displayOption) {
     case "info":
       // TODO: get person's info
+      displayPerson(person[0]);
       break;
     case "family":
       // TODO: get person's family
       break;
     case "descendants":
       // TODO: get person's descendants
+      displayDescendants(person[0], people);
       break;
     case "restart":
       app(people); // restart
@@ -186,6 +192,29 @@ function displayPerson(person) {
   alert(personInfo);
 }
 
+function displayDescendants(person, people) {
+  let message = '';
+
+  let descendantsArray = people.filter(function (potentialMatch) {
+    if (potentialMatch.parents[0] === person.id) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
+
+  //if(descendantsArray.length == 0) {
+  //  message = `${peson[0].firstName} ${person[0].lastName} has no known descendants.`;
+  //} else {
+  //  message = `${person[0].firstName} ${person[0].lastName} is the parent of `;
+  //  for(let i = 0; i < descendantsArray.length; i++) {
+  //    message += `${descendantsArray[i].firstName} ${descendantsArray[i].firstName}\n`;
+  //  }
+  //}
+  //console.log(message);
+  console.log(JSON.stringify(descendantsArray));
+}
 //#endregion
 
 
