@@ -41,7 +41,6 @@ function mainMenu(person, people) {
 
   switch (displayOption) {
     case "info":
-      // TODO: get person's info
       displayPerson(person[0]);
       break;
     case "family":
@@ -201,13 +200,13 @@ function displayPeople(people) {
 }
 
 function displayPerson(person) {
-  // print all of the information about a person:
-  // height, weight, age, name, occupation, eye color.
-  let personInfo = "First Name: " + person.firstName + "\n";
-  personInfo += "Last Name: " + person.lastName + "\n";
-  // TODO: finish getting the rest of the information to display.
-
-  // To Do: Use a string literal instead of concatenation. Take care of it.
+  let personInfo = `First Name: ${person.firstName}\n`;
+  personInfo += `Last Name: ${person.lastName}\n`;
+  personInfo += `Date of Birth: ${person.dob}\n`;
+  personInfo += `Height: " ${person.height}\n`;
+  personInfo += `Weight: " ${person.weight}\n`;
+  personInfo += `Eye Color: ${person.eyeColor}\n`;
+  personInfo += `Occupation: ${person.occupation}\n`;
   alert(personInfo);
 }
 
