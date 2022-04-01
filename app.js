@@ -48,7 +48,7 @@ function mainMenu(person, people) {
       displayFamily(person[0]);
       break;
     case "descendants":
-      // TODO: get person's descendants
+      displayDescendants(person[0], people);
       break;
     case "restart":
       app(people); // restart
@@ -203,11 +203,37 @@ function displayPerson(person) {
   let personInfo = `First Name: ${person.firstName}\n`;
   personInfo += `Last Name: ${person.lastName}\n`;
   personInfo += `Date of Birth: ${person.dob}\n`;
-  personInfo += `Height: " ${person.height}\n`;
-  personInfo += `Weight: " ${person.weight}\n`;
+  personInfo += `Height: ${person.height}\n`;
+  personInfo += `Weight: ${person.weight}\n`;
   personInfo += `Eye Color: ${person.eyeColor}\n`;
   personInfo += `Occupation: ${person.occupation}\n`;
   alert(personInfo);
+}
+
+// Alert a list of descendants.
+function displayDescendants(person, people) {
+  let message = '';
+  let descendantsArray = people.filter(function (potentialMatch) {
+    if (potentialMatch.parents[0] === person.id) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
+
+  // Construct message for alert message.
+  if(descendantsArray.length == 0) {
+    message = `${person.firstName} ${person.lastName} has no known descendants.`;
+  } else {
+    message = `${person.firstName} ${person.lastName} is the parent of \n`;
+    for(let i = 0; i < descendantsArray.length; i++) {
+      message += `${descendantsArray[i].firstName} ${descendantsArray[i].lastName}\n`;
+    }
+  }
+
+  // Display alert with list of descendants.
+  alert(message);
 }
 
 
