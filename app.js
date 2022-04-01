@@ -227,8 +227,14 @@ function displayDescendants(person, people) {
 function displayFamily(person, people) {
   // print all of the information about a person:
   // current spouses and parents .
+  findSpouse(person, people);
+  findParents(person, people);
+  findSiblings(person, people);
 
-  let parentMessage = '';
+  
+}
+
+function findSpouse(person, people) {
 
   let spouse = people.filter(function (potentialMatch) {
     if (potentialMatch.id === person.currentSpouse) {
@@ -240,6 +246,10 @@ function displayFamily(person, people) {
   });
 
   console.log(`Current Spouse is: ${spouse[0].firstName} ${spouse[0].lastName}`);
+}
+
+function findParents(person, people) {
+  let parentMessage = '';
 
   let parents = people.filter(function (potentialMatch) {
     if (potentialMatch.id === person.parents[0] || potentialMatch.id === person.parents[1]) {
@@ -262,6 +272,11 @@ function displayFamily(person, people) {
 
   console.log(parentMessage);
 }
+
+function findSiblings(person, people) {
+  console.log('To do find siblings');
+}
+
 
 function searchID(key, value, array) {
   let foundFamily = array.filter(function (potentialMatch) {
