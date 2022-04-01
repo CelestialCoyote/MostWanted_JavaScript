@@ -84,43 +84,10 @@ function searchByName(people) {
 }
 
 
-
-//unfinished function to search through an array of people to find matching eye colors. Use searchByName as reference.
-
-// function searchByEyeColor(people) {
-//   let color = promptFor("What is the person's eys color?", autoValid);
-
-//   let foundEyeColor = people.filter(function (potentialMatch) {
-//     if (potentialMatch.eyeColor === color) {
-//       return true;
-//     }
-//     else {
-//       return false;
-//     }
-//   });
-
-//   return foundEyeColor;
-
-// }
-
-//TODO: add other trait filter functions here.
-// function searchByGender(people) {
-//   let gender = promptFor("What is the person's gender?", autoValid);
-
-//   let foundGender = people.filter(function (potentialMatch) {
-//     if (potentialMatch.gender === gender) {
-//       return true;
-//     }
-//     else {
-//       return false;
-//     }
-//   });
-
-//   return foundGender;
-
-// }
-
-// Start search by various criteria.
+// Start search(es) by various criteria.
+// 1. Allow the user to choose which criteria to begin search.
+// 2. If the search returns an array with 2 or more individuals, allows user to choose another criteria and search again to narrow list.
+// 3. If the initial search, or any subsequent searches, results in either a single individual or no matches, fall through to mainMenu().
 function searchByCriteriaChoice(people) {
   let criteria = promptFor('What criteria would like to use?\n(gender, dob, height, weight, eyecolor, occupation)', autoValid);
   let suspectArray = people;
@@ -144,17 +111,13 @@ function searchByCriteriaChoice(people) {
     case 'weight':
       userChoice = promptFor('What is the weight?\n(in pounds)', autoValid);
       suspects = searchGeneral('weight', parseInt(userChoice), suspectArray);
-      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
-      break;
     case 'eyecolor':
       userChoice = promptFor('What is the eye color?\n(black, blue, brown, green, hazel)', autoValid);
       suspects = searchGeneral('eyeColor', userChoice, suspectArray);
-      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     case 'occupation':
       userChoice = promptFor('What is the occupation?', autoValid);
       suspects = searchGeneral('occupation', userChoice, suspectArray);
-      alert(`There are ${suspects.length} possible suspects, do you want to add another search criteria?`);
       break;
     default:
       userChoice = promptFor('That is not a valid criteria selection, please try again.', autoValid);
@@ -167,6 +130,7 @@ function searchByCriteriaChoice(people) {
       }
   }
 
+  // Display message to search again with new criteria, or return the arraay with a single individual or an empty array. 
   if (suspects.length > 1) {
     tryAgain = promptFor(`There are ${suspects.length} possible suspects, do you want to add another search criteria?\n(Y / N)`, autoValid);
 
@@ -178,6 +142,12 @@ function searchByCriteriaChoice(people) {
   }
 }
 
+// Actual search function bases on chosen criteria.
+// 1. User determines which criteria to be used (gender, dob, height, weight, eyecolor, occupation). 
+// 2. Search parameters are passed to search routine.
+//   The 'criteria' is the key of the key-value pair in data list.
+//   The 'criteriaChoice' is the value of the key-value pair in data list. 'Does individual have this?'
+//   The suspectArray is the current array to search.  Starts with entire list and gets narrow after each search.
 function searchGeneral(criteria, criteriaChoice, suspectArray) {
   let selectedCriteria = suspectArray.filter(function (potentialMatch) {
     if (potentialMatch[criteria] === criteriaChoice) {
@@ -188,6 +158,7 @@ function searchGeneral(criteria, criteriaChoice, suspectArray) {
     }
   });
 
+  // Array containing matched individuals with selected criteria.
   return selectedCriteria;
 }
 
