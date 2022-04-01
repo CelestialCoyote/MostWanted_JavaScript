@@ -221,8 +221,8 @@ function displayFamily(person) {
 
   let selectedSpousesArray = searchID("id", person[0].currentSpouse, data);
 
-  let personInfo = "Current Spouse: " + person[0].currentSpouse + "\n";
-  // personInfo += "Parents: " + person.parents + "\n";
+  let personInfo = searchID("Current Spouse: ", person[0].currentSpouse, data);
+  personInfo += "Parents: " + person.parents + "\n";
   // TODO: finish getting the rest of the information to display.
 
   // To Do: Use a string literal instead of concatenation. Take care of it.
