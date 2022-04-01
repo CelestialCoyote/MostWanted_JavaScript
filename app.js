@@ -45,10 +45,6 @@ function mainMenu(person, people) {
 
   switch (displayOption) {
     case "info":
-<<<<<<< HEAD
-=======
-      // TODO: get person's info
->>>>>>> ffe9b359b0ec58a69786e8c401c7dd66318cb586
       displayPerson(person[0]);
       break;
     case "family":
@@ -187,13 +183,13 @@ function displayPeople(people) {
 }
 
 function displayPerson(person) {
-  let personInfo = "First Name: " + person.firstName + "\n";
-  personInfo += "Last Name: " + person.lastName + "\n";
-  personInfo += "Date of Birth: " + person.dob + "\n";
-  personInfo += "Height: " + person.height + "\n";
-  personInfo += "Weight: " + person.weight + "\n";
-  personInfo += "Eye Color: " + person.eyeColor + "\n";
-  personInfo += "Occupation: " + person.occupation + "\n";
+  let personInfo = `First Name: ${person.firstName}\n`;
+  personInfo += `Last Name: ${person.lastName}\n`;
+  personInfo += `Date of Birth: ${person.dob}\n`;
+  personInfo += `Height: " ${person.height}\n`;
+  personInfo += `Weight: " ${person.weight}\n`;
+  personInfo += `Eye Color: ${person.eyeColor}\n`;
+  personInfo += `Occupation: ${person.occupation}\n`;
   alert(personInfo);
 }
 
