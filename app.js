@@ -45,7 +45,7 @@ function mainMenu(person, people) {
       break;
     case "family":
       // TODO: get person's family
-      displayFamily(person[0]);
+      displayFamily(person[0], people);
       break;
     case "descendants":
       displayDescendants(person[0], people);
@@ -164,20 +164,7 @@ function searchGeneral(criteria, criteriaChoice, suspectArray) {
   return selectedCriteria;
 
 }
-function searchID(criteriaKey, criteriaChoiceValue, suspectArray) {
-  let selectedCriteria = suspectArray.filter(function (potentialMatch) {
-    if (potentialMatch[criteriaKey] === criteriaChoiceValue) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  });
 
-  // Array containing matched individuals with selected criteria.
-  return selectedCriteria;
-
-}
 
 
 
@@ -237,24 +224,59 @@ function displayDescendants(person, people) {
 }
 
 
-function displayFamily(person) {
+function displayFamily(person, people) {
   // print all of the information about a person:
   // current spouses and parents .
 
-  // filter the people's obj array based on Id and return an ID.
-  // let selectedSpouse = searchID("id", person[0].currentSpouse, data);
+  let parentMessage = '';
 
-  let selectedSpousesArray = searchID("id", person[0].currentSpouse, data);
+  let spouse = people.filter(function (potentialMatch) {
+    if (potentialMatch.id === person.currentSpouse) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
 
-  let personInfo = searchID("Current Spouse: ", person[0].currentSpouse, data);
-  personInfo += "Parents: " + person.parents + "\n";
-  // TODO: finish getting the rest of the information to display.
+  console.log(`Current Spouse is: ${spouse[0].firstName} ${spouse[0].lastName}`);
 
-  // To Do: Use a string literal instead of concatenation. Take care of it.
-  alert(personInfo);
+  let parents = people.filter(function (potentialMatch) {
+    if (potentialMatch.id === person.parents[0] || potentialMatch.id === person.parents[1]) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
+
+  // Construct message for alert message.
+  if(parents.length == 0) {
+    parentMessage = `${person.firstName} ${person.lastName} has no known parents.`;
+  } else {
+    parentMessage = `${person.firstName} ${person.lastName} is the child of \n`;
+    for(let i = 0; i < parents.length; i++) {
+      parentMessage += `${parents[i].firstName} ${parents[i].lastName}\n`;
+    }
+  }
+
+  console.log(parentMessage);
 }
 
+function searchID(key, value, array) {
+  let foundFamily = array.filter(function (potentialMatch) {
+    if (potentialMatch[key] === value) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
 
+  // Array containing matched individuals with selected criteria.
+  return foundFamily;
+
+}
 
 
 
