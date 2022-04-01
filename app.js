@@ -120,7 +120,7 @@ function searchByCriteriaChoice(people) {
       suspects = searchGeneral('occupation', userChoice, suspectArray);
       break;
     default:
-      userChoice = promptFor('That is not a valid criteria selection, please try again.', autoValid);
+      userChoice = promptFor('That is not a valid criteria selection, do you want to try again?\n(Y/N)', autoValid);
 
       if (userChoice.toUpperCase() == 'Y') {
         return searchByCriteriaChoice(people);
@@ -172,7 +172,7 @@ function searchGeneral(criteria, criteriaChoice, suspectArray) {
 
 // alerts a list of people
 function displayPeople(people) {
-  return(people.map(function (person) {
+  return (people.map(function (person) {
     return person.firstName + " " + person.lastName;
   }).join(",\n"));
 }
