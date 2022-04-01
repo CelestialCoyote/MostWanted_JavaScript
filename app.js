@@ -37,11 +37,7 @@ function mainMenu(person, people) {
   }
 
   // Changed !person to person[0].firstName and person[0].lastName to correctly access object array.
-  let displayOption = promptFor(
-    `Found ${person[0].firstName} ${person[0].lastName}.
-    Do you want to know their 'info', 'family', or 'descendants'?
-    Type the option you want or 'restart' or 'quit'`,
-    autoValid);
+  let displayOption = promptFor("Found " + person[0].firstName + " " + person[0].lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", autoValid);
 
   switch (displayOption) {
     case "info":
@@ -50,10 +46,10 @@ function mainMenu(person, people) {
       break;
     case "family":
       // TODO: get person's family
+      displayFamily(person[0]);
       break;
     case "descendants":
       // TODO: get person's descendants
-      displayDescendants(person[0], people);
       break;
     case "restart":
       app(people); // restart
@@ -133,6 +129,7 @@ function searchByCriteriaChoice(people) {
       }
       else {
         app(people);
+        // To do: exit the program gracefully if user selects 'N'.  
       }
   }
 
@@ -166,7 +163,27 @@ function searchGeneral(criteria, criteriaChoice, suspectArray) {
 
   // Array containing matched individuals with selected criteria.
   return selectedCriteria;
+
 }
+function searchID(criteriaKey, criteriaChoiceValue, suspectArray) {
+  let selectedCriteria = suspectArray.filter(function (potentialMatch) {
+    if (potentialMatch[criteriaKey] === criteriaChoiceValue) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
+
+  // Array containing matched individuals with selected criteria.
+  return selectedCriteria;
+
+}
+
+
+
+
+
 
 
 //#endregion
@@ -189,32 +206,35 @@ function displayPerson(person) {
   let personInfo = "First Name: " + person.firstName + "\n";
   personInfo += "Last Name: " + person.lastName + "\n";
   // TODO: finish getting the rest of the information to display.
+
+  // To Do: Use a string literal instead of concatenation. Take care of it.
   alert(personInfo);
 }
 
-function displayDescendants(person, people) {
-  let message = '';
 
-  let descendantsArray = people.filter(function (potentialMatch) {
-    if (potentialMatch.parents[0] === person.id) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  });
+function displayFamily(person) {
+  // print all of the information about a person:
+  // current spouses and parents .
 
-  //if(descendantsArray.length == 0) {
-  //  message = `${peson[0].firstName} ${person[0].lastName} has no known descendants.`;
-  //} else {
-  //  message = `${person[0].firstName} ${person[0].lastName} is the parent of `;
-  //  for(let i = 0; i < descendantsArray.length; i++) {
-  //    message += `${descendantsArray[i].firstName} ${descendantsArray[i].firstName}\n`;
-  //  }
-  //}
-  //console.log(message);
-  console.log(JSON.stringify(descendantsArray));
+  // filter the people's obj array based on Id and return an ID.
+  // let selectedSpouse = searchID("id", person[0].currentSpouse, data);
+
+  let selectedSpousesArray = searchID("id", person[0].currentSpouse, data);
+
+  let personInfo = "Current Spouse: " + person[0].currentSpouse + "\n";
+  // personInfo += "Parents: " + person.parents + "\n";
+  // TODO: finish getting the rest of the information to display.
+
+  // To Do: Use a string literal instead of concatenation. Take care of it.
+  alert(personInfo);
 }
+
+
+
+
+
+
+
 //#endregion
 
 
