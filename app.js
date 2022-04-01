@@ -132,7 +132,7 @@ function searchByCriteriaChoice(people) {
 
   // Display message to search again with new criteria, or return the arraay with a single individual or an empty array. 
   if (suspects.length > 1) {
-    tryAgain = promptFor(`There are ${suspects.length} possible suspects, do you want to add another search criteria?\n(Y / N)`, autoValid);
+    tryAgain = promptFor(`There are ${suspects.length} possible suspects:\n${displayPeople(suspects)}.\nDo you want to add another search criteria?\n(Y / N)`, autoValid);
 
     if (tryAgain.toUpperCase() == 'Y') {
       return searchByCriteriaChoice(suspects);
@@ -172,9 +172,9 @@ function searchGeneral(criteria, criteriaChoice, suspectArray) {
 
 // alerts a list of people
 function displayPeople(people) {
-  alert(people.map(function (person) {
+  return(people.map(function (person) {
     return person.firstName + " " + person.lastName;
-  }).join("\n"));
+  }).join(",\n"));
 }
 
 function displayPerson(person) {
