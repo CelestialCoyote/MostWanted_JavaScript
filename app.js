@@ -209,16 +209,18 @@ function displayDescendants(person, people) {
     }
   });
 
-  //if(descendantsArray.length == 0) {
-  //  message = `${peson[0].firstName} ${person[0].lastName} has no known descendants.`;
-  //} else {
-  //  message = `${person[0].firstName} ${person[0].lastName} is the parent of `;
-  //  for(let i = 0; i < descendantsArray.length; i++) {
-  //    message += `${descendantsArray[i].firstName} ${descendantsArray[i].firstName}\n`;
-  //  }
-  //}
-  //console.log(message);
-  console.log(JSON.stringify(descendantsArray));
+  // Construct message for alert message.
+  if(descendantsArray.length == 0) {
+    message = `${person.firstName} ${person.lastName} has no known descendants.`;
+  } else {
+    message = `${person.firstName} ${person.lastName} is the parent of \n`;
+    for(let i = 0; i < descendantsArray.length; i++) {
+      message += `${descendantsArray[i].firstName} ${descendantsArray[i].lastName}\n`;
+    }
+  }
+
+  // Display alert with list of descendants.
+  alert(message);
 }
 //#endregion
 
