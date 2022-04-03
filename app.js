@@ -67,6 +67,23 @@ function mainMenu(person, people) {
   }
 }
 
+function quitRestartMenu(people) {
+  // Display options to restart search or quit.
+  let displayOption = promptFor(`
+    Type in 'restart' to begin a new search,
+    or 'quit', to quit program.`, autoValid);
+
+  switch (displayOption) {
+    case "restart":
+      app(people); // restart
+      break;
+    case "quit":
+      return; // stop execution
+    default:
+      return quitRestartMenu(people); // ask again
+  }
+}
+
 //#endregion
 
 //Filter functions.
@@ -134,8 +151,7 @@ function searchByCriteriaChoice(people) {
         return searchByCriteriaChoice(people);
       }
       else {
-        app(people);
-        // To do: exit the program gracefully if user selects 'N'.  
+        return quitRestartMenu(people);  
       }
   }
 
@@ -143,8 +159,10 @@ function searchByCriteriaChoice(people) {
   if (suspects.length > 1) {
     tryAgain = promptFor(`There are ${suspects.length} possible suspects:\n${displayPeople(suspects)}.\nDo you want to add another search criteria?\n(Y / N)`, autoValid);
 
-    if (tryAgain.toUpperCase() == 'Y') {
+    if(tryAgain == 'Y') {
       return searchByCriteriaChoice(suspects);
+    } else {
+      return quitRestartMenu(people);
     }
   } else {
     return suspects;
