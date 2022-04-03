@@ -8,8 +8,9 @@
 
 // app is the function called to start the entire application
 function app(people) {
-  let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
+  let searchType = promptFor(`Do you know the name of the person you are looking for?\nEnter 'yes' or 'no'`, yesNo).toLowerCase();
   let searchResults;
+
   switch (searchType) {
     case 'yes':
       searchResults = searchByName(people);
@@ -23,7 +24,13 @@ function app(people) {
   }
 
   // Call the mainMenu function ONLY after you find the SINGLE person you are looking for
-  mainMenu(searchResults, people);
+  // Check if searchResults is returned 'undefined' from quitRestartMenu().
+  // TODO: Probably not best way to handle this condition, find better option.
+  if(searchResults === undefined) {
+    return;     // stop execution.
+  } else {
+    mainMenu(searchResults, people);    // Go to mainMenu() to display results of search.
+  }
 }
 
 // Menu function to call once you find who you are looking for
@@ -37,7 +44,7 @@ function mainMenu(person, people) {
   }
 
   // Changed !person to person[0].firstName and person[0].lastName to correctly access object array.
-  let displayOption = promptFor("Found " + person[0].firstName + " " + person[0].lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'", autoValid);
+  let displayOption = promptFor(`Found ${person[0].firstName} ${person[0].lastName}.\nDo you want to know their 'info', 'family', or 'descendants'?\nType the option you want or 'restart' or 'quit'.`, autoValid);
 
   switch (displayOption) {
     case "info":
