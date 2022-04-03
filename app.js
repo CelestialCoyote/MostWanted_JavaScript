@@ -159,7 +159,7 @@ function searchByCriteriaChoice(people) {
   if (suspects.length > 1) {
     tryAgain = promptFor(`There are ${suspects.length} possible suspects:\n${displayPeople(suspects)}.\nDo you want to add another search criteria?\n(Y / N)`, autoValid);
 
-    if(tryAgain == 'Y') {
+    if(tryAgain.toUpperCase() == 'Y') {
       return searchByCriteriaChoice(suspects);
     } else {
       return quitRestartMenu(people);
@@ -187,15 +187,7 @@ function searchGeneral(criteria, criteriaChoice, suspectArray) {
 
   // Array containing matched individuals with selected criteria.
   return selectedCriteria;
-
 }
-
-
-
-
-
-
-
 
 //#endregion
 
@@ -211,14 +203,18 @@ function displayPeople(people) {
   }).join(",\n"));
 }
 
+// Display person found's information.
+// This includes their full name, dob, characteristics, & occupation.
 function displayPerson(person) {
+  // Create string will all information about person.
   let personInfo = `First Name: ${person.firstName}\n`;
   personInfo += `Last Name: ${person.lastName}\n`;
   personInfo += `Date of Birth: ${person.dob}\n`;
-  personInfo += `Height: ${person.height}\n`;
-  personInfo += `Weight: ${person.weight}\n`;
+  personInfo += `Height: ${person.height} inches\n`;
+  personInfo += `Weight: ${person.weight} pounds\n`;
   personInfo += `Eye Color: ${person.eyeColor}\n`;
-  personInfo += `Occupation: ${person.occupation}\n`;
+  personInfo += `Occupation: ${person.occupation}`;
+  
   alert(personInfo);
 }
 
@@ -248,40 +244,95 @@ function displayDescendants(person, people) {
   alert(message);
 }
 
+// Display list of descendants for person found.
+function displayDescendants(person, people) {
+  let totalDescendants = 0;
+  let message = '';
 
-function displayFamily(person, people) {
-  // print all of the information about a person:
-  // current spouses and parents .
-  findSpouse(person, people);
-  findParents(person, people);
-  findSiblings(person, people);
+  let children = findDescendants(person, people);
 
-  
+  // Construct message for alert message.
+  if(children.length == 0) {
+    message = `${person.firstName} ${person.lastName} has no known descendants.`;
+  } else {
+    message = `${person.firstName} ${person.lastName} is the parent of \n`;
+    for(let i = 0; i < children.length; i++) {
+      message += `${children[i].firstName} ${children[i].lastName}\n`;
+    }
+  }
+
+  // Display alert with list of descendants.
+  alert(message);
 }
 
-function findSpouse(person, people) {
+// Display immediate family of person found.
+// Includes currentSpouse, parents, & siblings.
+function displayFamily(person, people) {
+  let familyInformation = '';
 
-  let spouse = people.filter(function (potentialMatch) {
-    if (potentialMatch.id === person.currentSpouse) {
+  let spouse = findSpouse(person, people);
+  let parents = findParents(person, people);
+  let siblings = findSiblings(person, people);
+
+  familyInformation += `${spouse}\n${parents}\n${siblings}`;
+
+  alert(familyInformation);
+}
+
+function findDescendants(person, people) {
+  // Create an array to hold individuals found by referencing the id numbers listed
+  // in the potentialMatch.parents attribute.
+  let descendants = people.filter(function (potentialMatch) {
+    if (potentialMatch.parents[0] === person.id ||            // Rirst id in potentialMatch.parents is a match to person.id.
+      potentialMatch.parents[1] === person.id) {              // Second id in potentialMatch.parents is a match to person.id.
       return true;
     }
     else {
-      return false;
+      return false;                               // No matches, not a parent of person.
     }
   });
 
-  console.log(`Current Spouse is: ${spouse[0].firstName} ${spouse[0].lastName}`);
+  return descendants;
 }
 
+// Find currentSpouse of person found using id number in currentSpouse key-value pair.
+function findSpouse(person, people) {
+  let spouseMessage = '';
+
+  // Check to see if person.currentSpouse is 'null'.
+  if(person.currentSpouse === null) {
+    spouseMessage = 'No known spouse.'
+  } else {
+    // Create an array to hold individual information found by referencing the
+    // id number listed in person.currentSpouse attribute.
+    let spouse = people.filter(function (potentialMatch) {
+      if (potentialMatch.id === person.currentSpouse) {       // potentialMatch.id is a match for currentSpouse id in person.
+        return true;
+      }
+      else {
+        return false;                             // No match, not a spouse of person.
+      }
+    });
+
+    spouseMessage = `${person.firstName} ${person.lastName}'s current spouse is ${spouse[0].firstName} ${spouse[0].lastName}`;
+  }
+  
+  return spouseMessage;
+}
+
+// Find the parents of 'person' by using id number(s) listed in parents key-value pair.
 function findParents(person, people) {
   let parentMessage = '';
 
+  // Create new array to store individuals found by referencing id numbers listed in a
+  // suspects parents attribute.  It is an array with 0, 1, or 2 individuals.
   let parents = people.filter(function (potentialMatch) {
-    if (potentialMatch.id === person.parents[0] || potentialMatch.id === person.parents[1]) {
+    if(potentialMatch.id === person.parents[0] ||             // potentialMatch.id and first parent id for person match.
+      potentialMatch.id === person.parents[1]) {              // potentialMatch.id and second parent id for person match.
       return true;
     }
     else {
-      return false;
+      return false;                               // No matches, not a parent of person.
     }
   });
 
@@ -295,32 +346,50 @@ function findParents(person, people) {
     }
   }
 
-  console.log(parentMessage);
+  return parentMessage;
 }
 
+// Find the siblings of 'person' by using id number(s) listed in parents key-value pair.
 function findSiblings(person, people) {
-  console.log('To do find siblings');
-}
+  let siblingMessage = '';
 
-
-function searchID(key, value, array) {
-  let foundFamily = array.filter(function (potentialMatch) {
-    if (potentialMatch[key] === value) {
-      return true;
-    }
-    else {
-      return false;
+  // Create new array to store individuals found in people array to have at least on parent in common with person.
+  let siblings = people.filter(function (potentialMatch) {
+    
+    // Initial checks that disqualify potentialMatch for finding siblings.
+    if((potentialMatch.parents).length === 0 ||   // No parents in potentialMatch, siblings cannot be found.
+      (person.parents).length === 0 ||            // No parents in person, siblings cannot be found.
+      potentialMatch.id === person.id) {          // potentialMatch and person are the same individual.
+        return false;
+    // None of the above checks are true, check if andy id numbers in parents are a match.
+    } else {
+      // There is at least one parent id listed in potentialMatch.parents and person.parents.
+      if(potentialMatch.parents[0] === person.parents[0] ||   // First id in potentialMatch and first person match. 
+        potentialMatch.parents[0] === person.parents[1]) {    // First id in potentialMatch and second id in person match.
+        return true;
+      } else if((person.parents).length > 1 &&                // There is a second parent id listed in person.parents.
+        (potentialMatch.parents[1] === person.parents[0] ||   // Second id in potentialMatch and first in person match.
+        potentialMatch.parents[1] === person.parents[1])) {   // Second id in potentialMatch and second in person match.
+        return true;
+      } 
+      else {
+        return false;                             // No parent id numbers match. 
+      }
     }
   });
 
-  // Array containing matched individuals with selected criteria.
-  return foundFamily;
+  // Construct message for alert message.
+  if(siblings.length == 0) {
+    siblingMessage = `${person.firstName} ${person.lastName} has no known siblings.`;
+  } else {
+    siblingMessage = `${person.firstName} ${person.lastName} is the sibling of \n`;
+    for(let i = 0; i < siblings.length; i++) {
+      siblingMessage += `${siblings[i].firstName} ${siblings[i].lastName}\n`;
+    }
+  }
 
+  return siblingMessage;
 }
-
-
-
-
 
 //#endregion
 
