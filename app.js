@@ -31,7 +31,7 @@ function app(people) {
   // TODO: Probably not best way to handle this condition, find better option.
   if (searchResults === undefined) {
     return; // stop execution.
-  } else if(searchResults.length === 1) {
+  } else if(searchResults.length <= 1) {
     singleIndividual = searchResults[0];          // Get single object out of returned array.
     mainMenu(singleIndividual, people);           // Go to mainMenu() to display results of search.
   }
