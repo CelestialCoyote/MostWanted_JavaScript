@@ -135,27 +135,19 @@ function searchByCriteriaChoice(people) {
       suspects = searchGeneral("gender", userChoice, suspectArray);
       break;
     case "dob":
-      userChoice = promptFor(
-        "What is the date of birth?\n(mm/dd/yyyy)",
-        autoValid
-      );
+      userChoice = promptFor("What is the date of birth?\n(mm/dd/yyyy)", autoValid);
       suspects = searchGeneral("dob", userChoice, suspectArray);
       break;
     case "height":
-      userChoice = promptFor(
-        "What is the height?\n(in inches; 5 feet 5 inches = 65 inches)",
-        autoValid
-      );
+      userChoice = promptFor("What is the height?\n(in inches; 5 feet 5 inches = 65 inches)", autoValid);
       suspects = searchGeneral("height", parseInt(userChoice), suspectArray);
       break;
     case "weight":
       userChoice = promptFor("What is the weight?\n(in pounds)", autoValid);
       suspects = searchGeneral("weight", parseInt(userChoice), suspectArray);
+      break;
     case "eyecolor":
-      userChoice = promptFor(
-        "What is the eye color?\n(black, blue, brown, green, hazel)",
-        autoValid
-      );
+      userChoice = promptFor("What is the eye color?\n(black, blue, brown, green, hazel)", autoValid);
       suspects = searchGeneral("eyeColor", userChoice, suspectArray);
       break;
     case "occupation":
@@ -248,6 +240,10 @@ function displayDescendants(person, people) {
   let message = "";
 
   let children = findDescendants(person, people);
+
+  // To search for grandchildren, the array that comes back from findDescendants() needs to be run
+  // through the search again.  However, each entry in the returned array need to be checked again
+  // all people in data.js.
 
   // Construct message for alert message.
   if (children.length == 0) {
