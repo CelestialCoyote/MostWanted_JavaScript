@@ -31,9 +31,12 @@ function app(people) {
   // TODO: Probably not best way to handle this condition, find better option.
   if (searchResults === undefined) {
     return; // stop execution.
-  } else if(searchResults.length === 1) {
-    singleIndividual = searchResults[0];          // Get single object out of returned array.
-    mainMenu(singleIndividual, people);           // Go to mainMenu() to display results of search.
+  } else if (searchResults.length === 1) {
+    singleIndividual = searchResults[0]; // Get single object out of returned array.
+    mainMenu(singleIndividual, people); // Go to mainMenu() to display results of search.
+  } else {
+    alert("The individual does not exist in the list!");
+    return app(people); // restart the application
   }
 }
 
@@ -47,7 +50,10 @@ function mainMenu(person, people) {
   }
 
   // Changed !person to person[0].firstName and person[0].lastName to correctly access object array.
-  let displayOption = promptFor(`Found ${person.firstName} ${person.lastName}.\nDo you want to know their 'info', 'family', or 'descendants'?\nType the option you want or 'restart' or 'quit'.`, autoValid);
+  let displayOption = promptFor(
+    `Found ${person.firstName} ${person.lastName}.\nDo you want to know their 'info', 'family', or 'descendants'?\nType the option you want or 'restart' or 'quit'.`,
+    autoValid
+  );
 
   switch (displayOption) {
     case "info":
@@ -102,13 +108,15 @@ function searchByName(people) {
   let lastName = promptFor("What is the person's last name?", autoValid);
 
   let foundPerson = people.filter(function (potentialMatch) {
-    if (potentialMatch.firstName === firstName && potentialMatch.lastName === lastName) {
+    if (
+      potentialMatch.firstName === firstName &&
+      potentialMatch.lastName === lastName
+    ) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-  })
+  });
 
   return foundPerson;
 }
@@ -176,7 +184,9 @@ function searchByCriteriaChoice(people) {
   // Display message to search again with new criteria, or return the arraay with a single individual or an empty array.
   if (suspects.length > 1) {
     tryAgain = promptFor(
-      `There are ${suspects.length} possible suspects:\n${displayPeople(suspects)}.\nDo you want to add another search criteria?\n(Y / N)`,
+      `There are ${suspects.length} possible suspects:\n${displayPeople(
+        suspects
+      )}.\nDo you want to add another search criteria?\n(Y / N)`,
       autoValid
     );
 
@@ -280,8 +290,8 @@ function findDescendants(person, people) {
   // in the potentialMatch.parents attribute.
   let descendants = people.filter(function (potentialMatch) {
     if (
-      potentialMatch.parents[0] === person.id ||  // First id in potentialMatch.parents is a match to person.id.
-      potentialMatch.parents[1] === person.id     // Second id in potentialMatch.parents is a match to person.id.
+      potentialMatch.parents[0] === person.id || // First id in potentialMatch.parents is a match to person.id.
+      potentialMatch.parents[1] === person.id // Second id in potentialMatch.parents is a match to person.id.
     ) {
       // Second id in potentialMatch.parents is a match to person.id.
       return true;
