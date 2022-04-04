@@ -12,6 +12,7 @@ function app(people) {
     yesNo
   ).toLowerCase();
   let searchResults;
+  let singleIndividual;
 
   switch (searchType) {
     case "yes":
@@ -30,37 +31,33 @@ function app(people) {
   // TODO: Probably not best way to handle this condition, find better option.
   if (searchResults === undefined) {
     return; // stop execution.
-  } else {
-    mainMenu(searchResults, people); // Go to mainMenu() to display results of search.
+  } else if(searchResults.length === 1) {
+    singleIndividual = searchResults[0];          // Get single object out of returned array.
+    mainMenu(singleIndividual, people);           // Go to mainMenu() to display results of search.
   }
 }
 
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people) {
-  /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
-
-  // Changed !person to !person[0] to correctly access object array.
-  if (!person[0]) {
+  // Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people.
+  // We need people in order to find descendants and other information that the user may want.
+  if (!person) {
     alert("Could not find that individual.");
     return app(people); // restart
   }
 
   // Changed !person to person[0].firstName and person[0].lastName to correctly access object array.
-  let displayOption = promptFor(
-    `Found ${person}\nDo you want to know their 'info', 'family', or 'descendants'?\nType the option you want or 'restart' or 'quit'.`,
-    autoValid
-  );
+  let displayOption = promptFor(`Found ${person.firstName} ${person.lastName}.\nDo you want to know their 'info', 'family', or 'descendants'?\nType the option you want or 'restart' or 'quit'.`, autoValid);
 
   switch (displayOption) {
     case "info":
-      displayPerson(person[0]);
+      displayPerson(person);
       break;
     case "family":
-      // TODO: get person's family
-      displayFamily(person[0], people);
+      displayFamily(person, people);
       break;
     case "descendants":
-      displayDescendants(person[0], people);
+      displayDescendants(person, people);
       break;
     case "restart":
       app(people); // restart
@@ -99,32 +96,21 @@ function quitRestartMenu(people) {
 /////////////////////////////////////////////////////////////////
 //#region
 
-//nearly finished function used to search through an array of people to find matching first and last name and return a SINGLE person object.
+// Returns an array with a single object.
 function searchByName(people) {
   let firstName = promptFor("What is the person's first name?", autoValid);
   let lastName = promptFor("What is the person's last name?", autoValid);
 
-  let foundPersonArray = people.filter(function (potentialMatch) {
-    if (
-      potentialMatch.firstName === firstName &&
-      potentialMatch.lastName === lastName
-    ) {
+  let foundPerson = people.filter(function (potentialMatch) {
+    if (potentialMatch.firstName === firstName && potentialMatch.lastName === lastName) {
       return true;
-    } else {
+    }
+    else {
       return false;
     }
-  });
+  })
 
-  // pull the first and last names from the foundPersonArray and combine it
-  let firstNameValue = foundPersonArray[0].firstName;
-
-  let secondNameValue = foundPersonArray[0].lastName;
-
-  let fullNameValue = firstNameValue + " " + secondNameValue;
-
-  console.log(fullNameValue);
-
-  return fullNameValue;
+  return foundPerson;
 }
 
 // Start search(es) by various criteria.
@@ -190,9 +176,7 @@ function searchByCriteriaChoice(people) {
   // Display message to search again with new criteria, or return the arraay with a single individual or an empty array.
   if (suspects.length > 1) {
     tryAgain = promptFor(
-      `There are ${suspects.length} possible suspects:\n${displayPeople(
-        suspects
-      )}.\nDo you want to add another search criteria?\n(Y / N)`,
+      `There are ${suspects.length} possible suspects:\n${displayPeople(suspects)}.\nDo you want to add another search criteria?\n(Y / N)`,
       autoValid
     );
 
@@ -256,31 +240,6 @@ function displayPerson(person) {
   alert(personInfo);
 }
 
-// Alert a list of descendants.
-function displayDescendants(person, people) {
-  let message = "";
-  let descendantsArray = people.filter(function (potentialMatch) {
-    if (potentialMatch.parents[0] === person.id) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-
-  // Construct message for alert message.
-  if (descendantsArray.length == 0) {
-    message = `${person.firstName} ${person.lastName} has no known descendants.`;
-  } else {
-    message = `${person.firstName} ${person.lastName} is the parent of \n`;
-    for (let i = 0; i < descendantsArray.length; i++) {
-      message += `${descendantsArray[i].firstName} ${descendantsArray[i].lastName}\n`;
-    }
-  }
-
-  // Display alert with list of descendants.
-  alert(message);
-}
-
 // Display list of descendants for person found.
 function displayDescendants(person, people) {
   let totalDescendants = 0;
@@ -321,8 +280,8 @@ function findDescendants(person, people) {
   // in the potentialMatch.parents attribute.
   let descendants = people.filter(function (potentialMatch) {
     if (
-      potentialMatch.parents[0] === person.id || // Rirst id in potentialMatch.parents is a match to person.id.
-      potentialMatch.parents[1] === person.id
+      potentialMatch.parents[0] === person.id ||  // First id in potentialMatch.parents is a match to person.id.
+      potentialMatch.parents[1] === person.id     // Second id in potentialMatch.parents is a match to person.id.
     ) {
       // Second id in potentialMatch.parents is a match to person.id.
       return true;
