@@ -236,22 +236,43 @@ function displayPerson(person) {
 
 // Display list of descendants for person found.
 function displayDescendants(person, people) {
-  let totalDescendants = 0;
+  let totalDescendants = [];
   let message = "";
 
+  // Create array to hold possible children.
   let children = findDescendants(person, people);
 
-  // To search for grandchildren, the array that comes back from findDescendants() needs to be run
-  // through the search again.  However, each entry in the returned array need to be checked again
-  // all people in data.js.
+  // If children array comes back with any entries, run each child back through
+  // findDescendants() to see if they have children themselves.
+  let grandChildren = [];
+  let total = [];
+  if(children.length > 0) {
+    let moreDescendants = [];
+
+    // Take each individual in the children array and check for descendants.
+    for(let i = 0; i < children.length; i++) {
+      moreDescendants = findDescendants(children[i], people)
+    }
+
+    // As each individual is checked for descendants, add found descendants to 
+    // grandChildren array with the spread operator.
+    grandChildren = [...total, ...moreDescendants]; 
+  }
+
+  // If grandChildren array has any found descendants, add them to the totalDescendants array.
+  if(grandChildren.length > 0) {
+    totalDescendants = [...children, ...grandChildren];
+  } else {
+    totalDescendants = children;
+  }
 
   // Construct message for alert message.
   if (children.length == 0) {
     message = `${person.firstName} ${person.lastName} has no known descendants.`;
   } else {
-    message = `${person.firstName} ${person.lastName} is the parent of \n`;
-    for (let i = 0; i < children.length; i++) {
-      message += `${children[i].firstName} ${children[i].lastName}\n`;
+    message = `${person.firstName} ${person.lastName} is the ancestor of \n`;
+    for (let i = 0; i < totalDescendants.length; i++) {
+      message += `${totalDescendants[i].firstName} ${totalDescendants[i].lastName}\n`;
     }
   }
 
